@@ -770,11 +770,10 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const currentGain = gainNode.gain.value;
 
       const gainExp = 10 ** ((40 * gain - 40) / 20)
-      const currentGainExp = 10 ** ((40 * currentGain - 40) / 20)
 
       // Reset
       gainNode.gain.cancelScheduledValues(now);
-      gainNode.gain.setValueAtTime(currentGainExp, now);
+      gainNode.gain.setValueAtTime(currentGain, now);
 
       // Ramp time is set server side
       gainNode.gain.linearRampToValueAtTime(gainExp, now + rampTime);
