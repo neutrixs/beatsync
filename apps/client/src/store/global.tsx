@@ -769,14 +769,12 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
       const now = audioContext.currentTime;
       const currentGain = gainNode.gain.value;
 
-      const gainExp = 10 ** ((40 * gain - 40) / 20)
-
       // Reset
       gainNode.gain.cancelScheduledValues(now);
       gainNode.gain.setValueAtTime(currentGain, now);
 
       // Ramp time is set server side
-      gainNode.gain.linearRampToValueAtTime(gainExp, now + rampTime);
+      gainNode.gain.linearRampToValueAtTime(gain, now + rampTime);
     },
 
     pauseAudio: (data: { when: number }) => {
@@ -892,8 +890,7 @@ export const useGlobalStore = create<GlobalState>((set, get) => {
     getCurrentGainValue: () => {
       const state = get();
       if (!state.audioPlayer) return 1; // Default value if no player
-      const gainValue = state.audioPlayer.gainNode.gain.value
-      return gainValue == 0 ? 0 : (20 * Math.log10(gainValue) + 40) / 40;
+      return state.audioPlayer.gainNode.gain.value
     },
 
     // Reset function to clean up state

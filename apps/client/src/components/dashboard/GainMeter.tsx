@@ -14,7 +14,8 @@ export const GainMeter = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       const currentGain = getCurrentGainValue();
-      setGainValue(currentGain);
+      // volume perception is logarithmic
+      setGainValue((20 * Math.log10(currentGain) + 40) / 40);
     }, 50);
 
     return () => clearInterval(intervalId);

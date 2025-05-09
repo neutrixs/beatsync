@@ -49,12 +49,15 @@ export function gainFromDistanceLinear({
 export function gainFromDistanceQuadratic({
   client,
   source,
-  falloff = 0.001,
-  minGain = 0.15,
+  falloff = 0.0001,
+  minGain = 0.5,
   maxGain = 1.0,
 }: GainParams): number {
   const distance = calculateEuclideanDistance(client, source);
   // Quadratic falloff: gain decreases with square of distance
   const gain = maxGain - falloff * distance * distance;
-  return Math.max(minGain, gain);
+  // linear scale from -40dB (0.0) to 0dB (1.0)
+  const realisticGain = Math.max(minGain, gain);
+
+  return 10 ** ((40 * realisticGain - 40) / 20)
 }
